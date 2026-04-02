@@ -119,3 +119,24 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.price, product.price)
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
+
+    def test_update_a_product(self):
+        """It should Update a product"""
+        # Creating a product and storing it in the database
+        product = ProductFactory()
+        logging.info("Created product with product factory: %s", product.serialize())
+        product.id = None
+        product.create()
+        logging.info("Created the product with product.create(): %s", product.serialize())
+        self.assertIsNotNone(product.id)
+        # Updating the product description and storing it in the database
+        test_product_id = product.id
+        test_product_description = "Updated description for testing purposes"
+        product.description = test_product_description
+        product.update()
+        # Getting the product from the database
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        # Ensuring the product description changed, but not the id
+        self.assertEqual(products[0].id, test_product_id)
+        self.assertEqual(products[0].description, test_product_description)
