@@ -152,3 +152,15 @@ class TestProductModel(unittest.TestCase):
         # Deleting the product from the database
         product.delete()
         self.assertEqual(len(product.all()), 0)
+
+    def test_list_all_products(self):
+        """ It should List all products"""
+        # List all products when none have been added to the database
+        self.assertEqual(len(Product.all()), 0)
+        # Adding 5 products added to the database
+        for _ in range(5):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+        # List all products when 5 have been added to the database
+        self.assertEqual(len(Product.all()), 5)
