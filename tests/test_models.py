@@ -140,3 +140,15 @@ class TestProductModel(unittest.TestCase):
         # Ensuring the product description changed, but not the id
         self.assertEqual(products[0].id, test_product_id)
         self.assertEqual(products[0].description, test_product_description)
+
+    def test_delete_a_product(self):
+        """It should Delete a product"""
+        # Creating a product and storing it in the database
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertEqual(len(Product.all()), 1)
+
+        # Deleting the product from the database
+        product.delete()
+        self.assertEqual(len(product.all()), 0)
