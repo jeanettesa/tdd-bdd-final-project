@@ -154,13 +154,36 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(product.all()), 0)
 
     def test_list_all_products(self):
-        """ It should List all products"""
+        """It should List all products"""
         # List all products when none have been added to the database
         self.assertEqual(len(Product.all()), 0)
-        # Adding 5 products added to the database
+        # Adding 5 products to the database
         for _ in range(5):
             product = ProductFactory()
             product.id = None
             product.create()
         # List all products when 5 have been added to the database
         self.assertEqual(len(Product.all()), 5)
+
+    def test_find_a_product_by_name(self):
+        """It should Find a product by name"""
+        products = []
+        # Adding 5 products to the database
+        for _ in range(5):
+            product = ProductFactory()
+            products.append(product)  # Keeping the products in a list for later tests
+            product.create()
+        # Getting the name of the first product
+        product_name = products[0].name
+        # Counting occurrence of the product name for all products
+        product_name_count = 0
+        for product in products:
+            if product.name == product_name:
+                product_name_count += 1
+        # Retrieving products with the product name from the database using Product.find_by_name()
+        products_by_name = Product.find_by_name(product_name)
+        # Assert if the count of the found products matches the expected count
+        self.assertEqual(products_by_name.count(), product_name_count)
+        # Assert that each retrieved product's name matches the expected name
+        for retrieved_product in products_by_name:
+            self.assertEqual(retrieved_product.name, product_name)
