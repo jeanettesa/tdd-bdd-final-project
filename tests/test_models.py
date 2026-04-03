@@ -124,10 +124,8 @@ class TestProductModel(unittest.TestCase):
         """It should Update a product"""
         # Creating a product and storing it in the database
         product = ProductFactory()
-        logging.info("Created product with product factory: %s", product.serialize())
         product.id = None
         product.create()
-        logging.info("Created the product with product.create(): %s", product.serialize())
         self.assertIsNotNone(product.id)
         # Updating the product description and storing it in the database
         test_product_id = product.id
@@ -187,3 +185,21 @@ class TestProductModel(unittest.TestCase):
         # Assert that each retrieved product's name matches the expected name
         for retrieved_product in products_by_name:
             self.assertEqual(retrieved_product.name, product_name)
+
+    def test_find_a_product_by_availability(self):
+        """It should Find a product by availability"""
+        # Creating 10 products and adding them to the database
+        products = ProductFactory.create_batch(size=10)
+        for product in products:
+            product.create()
+        # Getting the availability of the first product
+        product_available = products[0].available
+        # Count num occurrences of product availability in the product list
+        product_availability_count = len([product for product in products if product.available == product_available])
+        # Retrieve products with the availability of the first product from the database
+        retrieved_products = Product.find_by_availability(product_available)
+        # Assert if the count of the retrieved products matches the expected count
+        self.assertEqual(retrieved_products.count(), product_availability_count)
+        # Assert that each product's availability matches the expected availability
+        for product in retrieved_products:
+            self.assertEqual(product.available, product_available)
