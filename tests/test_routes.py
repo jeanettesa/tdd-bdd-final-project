@@ -175,6 +175,14 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         self.assertEqual(data["description"], test_product.description)
 
+    def test_get_product_not_found(self):
+        """It should Read a Product with an invalid id"""
+        response = self.client.get(f"{BASE_URL}/0")
+        logging.info(response.get_json())
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("not found in database", data["message"])
+
     ######################################################################
     # Utility functions
     ######################################################################
