@@ -238,7 +238,8 @@ class Product(db.Model):
     def find_by_category(cls, category: Category = Category.UNKNOWN) -> list:
         """Returns all Products by their Category
 
-        :param category: values are ['MALE', 'FEMALE', 'UNKNOWN']
+        :param category: values are ['CLOTHS', 'FOOD', 'HOUSEWARES',
+                                    'AUTOMOTIVE', 'TOOLS', 'UNKNOWN']
         :type available: enum
 
         :return: a collection of Products that are available

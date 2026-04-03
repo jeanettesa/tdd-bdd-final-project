@@ -203,3 +203,21 @@ class TestProductModel(unittest.TestCase):
         # Assert that each product's availability matches the expected availability
         for product in retrieved_products:
             self.assertEqual(product.available, product_available)
+
+    def test_find_a_product_by_category(self):
+        """It should Find a product by category"""
+        # Creating 10 products
+        products = ProductFactory.create_batch(size=10)
+        for product in products:
+            product.create()  # Adding products to the database
+        # Retrieve the category of the first product in the products list
+        product_category = products[0].category
+        # Count num occurrences of the product category in the product list
+        product_category_count = len([product for product in products if product.category == product_category])
+        # Retrieve products from the database that have the product category
+        retrieved_products = Product.find_by_category(product_category)
+        # Assert if the count of the found products matches the expected count
+        self.assertEqual(retrieved_products.count(), product_category_count)
+        # Assert that each product's category matches the expected category
+        for product in retrieved_products:
+            self.assertEqual(product.category, product_category)
