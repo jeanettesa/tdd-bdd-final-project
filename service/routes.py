@@ -72,7 +72,7 @@ def check_content_type(content_type):
 def create_products():
     """
     Creates a Product
-    This endpoint will create a Product based the data in the body that is posted
+    This endpoint will create a Product based on the data in the body that is posted
     """
     app.logger.info("Request to Create a Product...")
     check_content_type("application/json")
@@ -123,13 +123,34 @@ def get_products(product_id):
     message = product.serialize()
     return jsonify(message), status.HTTP_200_OK
 
+
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
+@app.route("/products/<product_id>", methods=["PUT"])
+def update_products(product_id):
+    """
+    Updates a Product
+    This endpoint will update the product with the id specified in the URL based on the data in the body
+    """
+    app.logger.info(f"Request to update product with product_id {product_id} based on the data in the body.")
+    check_content_type("application/json")
+    product = Product.find(product_id)
+    if product is None:
+        app.logger.error(f"No product found with id {product_id}")
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"No product found with id {product_id}"
+        )
+    data = request.get_json()
 
-#
-# PLACE YOUR CODE TO UPDATE A PRODUCT HERE
-#
+    product = product.deserialize(data)
+    product.id = product_id
+    product.update()
+
+    app.logger.info(f"Updated the product with product id {product_id}...")
+    message = product.serialize()
+    return jsonify(message), status.HTTP_200_OK
 
 ######################################################################
 # D E L E T E   A   P R O D U C T
