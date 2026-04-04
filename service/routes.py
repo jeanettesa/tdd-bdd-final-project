@@ -152,11 +152,19 @@ def update_products(product_id):
     message = product.serialize()
     return jsonify(message), status.HTTP_200_OK
 
+
 ######################################################################
 # D E L E T E   A   P R O D U C T
 ######################################################################
+@app.route("/products/<product_id>", methods=["DELETE"])
+def delete_products(product_id):
+    """
+    Deletes a Product
+    This endpoint will delete the product with the id specified in the URL
+    """
+    app.logger.info(f"Request to delete product with product_id {product_id}")
+    product = Product.find(product_id)
+    product.delete()
 
-
-#
-# PLACE YOUR CODE TO DELETE A PRODUCT HERE
-#
+    app.logger.info(f"Deleted the product with product id {product_id}...")
+    return jsonify({}), status.HTTP_204_NO_CONTENT

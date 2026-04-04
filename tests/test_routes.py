@@ -213,6 +213,25 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         self.assertIn("No product found in database", data["message"])
 
+    def test_delete_product(self):
+        """ It should Delete a product"""
+        # First create a product and add to the database
+        product = ProductFactory()
+        response = self.client.post(f"{BASE_URL}", json=product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        logging.info("Received json: %s", response.get_json())
+        # Get the created product from the database in case the id changed upon storage
+        product_json = response.get_json()
+        # Delete the created product
+        response = self.client.delete(f"{BASE_URL}/{product_json['id']}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        logging.info("Received response: %s", response)
+        # Check that the product can no longer be found in the database
+        response = self.client.get(f"{BASE_URL}/{product_json['id']}")
+        logging.info("Received response: %s", response)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     ######################################################################
     # Utility functions
     ######################################################################
