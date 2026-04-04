@@ -232,6 +232,18 @@ class TestProductRoutes(TestCase):
         logging.info("Received response: %s", response)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_list_all_products(self):
+        """It should List all products"""
+        # First create a number of products and add them to the database
+        products = self._create_products(5)
+        self.assertEqual(len(products), 5)
+        # Get all products from the database
+        response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        logging.info("Retrieved response json: %s", response.get_json())
+        retrieved_products = response.get_json()  # Should be an array of json
+        self.assertEqual(len(retrieved_products), len(products))
+
     ######################################################################
     # Utility functions
     ######################################################################
