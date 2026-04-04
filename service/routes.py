@@ -137,10 +137,10 @@ def update_products(product_id):
     check_content_type("application/json")
     product = Product.find(product_id)
     if product is None:
-        app.logger.error(f"No product found with id {product_id}")
+        app.logger.error(f"No product found in database with id {product_id}")
         abort(
             status.HTTP_404_NOT_FOUND,
-            f"No product found with id {product_id}"
+            f"No product found in database with id {product_id}"
         )
     data = request.get_json()
 

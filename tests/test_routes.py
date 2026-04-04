@@ -202,6 +202,17 @@ class TestProductRoutes(TestCase):
         self.assertEqual(updated_product_json["description"], product_json["description"])
         self.assertEqual(updated_product_json["available"], product_json["available"])
 
+    def test_update_product_not_found(self):
+        """It should Update a product with an invalid id"""
+        # First create product to add to the request body
+        product = ProductFactory()
+        # Setting product id in the URL to "0" should cause "404 Not Found"
+        response = self.client.put(f"{BASE_URL}/0", json=product.serialize())
+        logging.info("Received json: %s", response.get_json())
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("No product found in database", data["message"])
+
     ######################################################################
     # Utility functions
     ######################################################################
