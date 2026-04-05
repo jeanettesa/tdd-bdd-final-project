@@ -110,9 +110,16 @@ def get_product_list():
 
     # If URL has 'name' parameter then filter by value
     name_filter = request.args.get("name")
+    available_filter = request.args.get("available")
+
     if name_filter is not None:
+        app.logger.info("Filter by name...")
         products.extend(Product.find_by_name(name_filter))
+    elif available_filter is not None:
+        app.logger.info("Filter by available...")
+        products.extend(Product.find_by_availability(available_filter))
     else:  # Else return all products
+        app.logger.info("Retrieve all...")
         products.extend(Product.all())
 
     json_products = [product.serialize() for product in products]
