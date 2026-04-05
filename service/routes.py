@@ -95,20 +95,28 @@ def create_products():
 
 
 ######################################################################
-# L I S T   A L L   P R O D U C T S
+# L I S T   P R O D U C T S
 ######################################################################
 @app.route("/products", methods=["GET"])
 def get_product_list():
     """
-    Lists all Products
-    This endpoint will list all Products.
+    Lists Products
+    This endpoint will list Products.
+    It accepts the query parameters 'name' and 'category'.
+    If no query parameters are received it will list all Products.
     """
-    app.logger.info("Request to retrieve the Product list...")
-    products = Product.all()
-    json_products = []
+    products = []
+    app.logger.info("Request to retrieve Products...")
 
-    for product in products:
-        json_products.append(product.serialize())
+    # If URL has 'name' parameter then filter by value
+    name_filter = request.args.get("name")
+    if name_filter is not None:
+        products.extend(Product.find_by_name(name_filter))
+    else:  # Else return all products
+        products.extend(Product.all())
+
+    json_products = [product.serialize() for product in products]
+
     app.logger.info("[%s] Products returned", len(json_products))
     return jsonify(json_products), status.HTTP_200_OK
 
