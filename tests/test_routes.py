@@ -273,6 +273,22 @@ class TestProductRoutes(TestCase):
         for retrieved_prod in retrieved_products:
             self.assertEqual(retrieved_prod["available"], product_available)
 
+    def test_query_by_category(self):
+        """It should query products by category"""
+        products = self._create_products(5)
+        product_category = products[0].category
+        filtered_products = [product for product in products if product.category == product_category]
+        query_data = {"category": product_category.name}
+        logging.info("Query string is %s", query_data)
+        response = self.client.get(BASE_URL, query_string=query_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        logging.info("Retrieved response json: %s", response.get_json())
+        retrieved_products = response.get_json()
+        self.assertEqual(len(retrieved_products), len(filtered_products))
+        for retrieved_prod in retrieved_products:
+            # Due to serialization, the category value of each received product is the category name
+            self.assertEqual(retrieved_prod["category"], product_category.name)
+
     ######################################################################
     # Utility functions
     ######################################################################
