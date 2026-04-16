@@ -98,13 +98,28 @@ def step_impl(context, element_name):
 
 ##################################################################
 # This code works because of the following naming convention:
-# The buttons have an id in the html hat is the button text
-# in lowercase followed by '-btn' so the Clean button has an id of
+# The buttons have an id in the html that is the button text
+# in lowercase followed by '-btn' so the Clear button has an id of
 # id='clear-btn'. That allows us to lowercase the name and add '-btn'
 # to get the element id of any button
 ##################################################################
 
 ## UPDATE CODE HERE ##
+@when(u'I press the "{button}" button')
+def step_impl(context, button):
+    element_id = button.lower() + '-btn'
+    element = context.driver.find_element(By.ID, element_id)
+    element.click()
+
+@then(u'I should see the message "{message}"')
+def step_impl(context, message):
+    element = context.driver.find_element(By.ID, "flash_message")
+    assert(message in element.text)
+
+@when(u'I click the "Search" button')
+def step_impl(context):
+    element = context.driver.find_element(By.ID, "search-btn")
+    element.click()
 
 ##################################################################
 # This code works because of the following naming convention:
