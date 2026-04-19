@@ -26,6 +26,15 @@ Scenario: List all Products
     And I should see "Big Mac" in the results
     And I should see "Sheets" in the results
 
+Scenario: Search a Product based on Name
+    When I visit the "Home Page"
+    And I press the "Clear" button
+    And I set the "Name" to "Shoes"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "Shoes" in the "Name" field
+    And I should see "Blue shoes" in the "Description" field
+
 Scenario: Search a Product based on Availability
     When I visit the "Home Page"
     And I press the "Clear" button
