@@ -16,6 +16,16 @@ Scenario: The server is running
     Then I should see "Product Catalog Administration" in the title
     And I should not see "404 Not Found"
 
+Scenario: List all Products
+    When I visit the "Home Page"
+    And I press the "Clear" button
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "Hat" in the results
+    And I should see "Shoes" in the results
+    And I should see "Big Mac" in the results
+    And I should see "Sheets" in the results
+
 Scenario: Create a Product
     When I visit the "Home Page"
     And I set the "Name" to "Hammer"
