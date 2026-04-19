@@ -116,6 +116,16 @@ def step_impl(context, message):
     element = context.driver.find_element(By.ID, "flash_message")
     assert(message in element.text)
 
+@then(u'I should see "{content}" in the results')
+def step_impl(context, content):
+    element = context.driver.find_element(By.ID, "search_results")
+    assert(content in element.text)
+
+@then(u'I should not see "{content}" in the results')
+def step_impl(context, content):
+    element = context.driver.find_element(By.ID, "search_results")
+    assert(content not in element.text)
+
 ##################################################################
 # This code works because of the following naming convention:
 # The id field for text input in the html is the element name
