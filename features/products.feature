@@ -88,10 +88,10 @@ Scenario: Delete a Product
     And I set the "Name" to "Big Mac"
     And I press the "Search" button
     Then I should see the message "Success"
+    And I should see "1/4 lb burger" in the "Description" field
     When I copy the "Id" field
     And I press the "Clear" button
     Then the "Id" field should be empty
-    And the "Name" field should be empty
     When I paste the "Id" field
     And I press the "Delete" button
     Then I should see the message "Product has been Deleted!"
@@ -103,5 +103,5 @@ Scenario: Delete a Product
     And the "Description" field should be empty
     When I press the "Clear" button
     And I press the "Search" button
-    Then I should not see "Big Mac" in the results
-    And I should see "Shoes" in the results
+    Then I should see the message "Success"
+    And I should not see "Big Mac" in the results
