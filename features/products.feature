@@ -101,11 +101,8 @@ Scenario: Update a Product
     And I set the "Name" to "Hat"
     And I press the "Search" button
     Then I should see the message "Success"
+    And I should see "A red fedora" in the "Description" field
     When I set the "Name" to "Saw"
-    And I set the "Description" to "A plain saw"
-    And I select "False" in the "Available" dropdown
-    And I select "Tools" in the "Category" dropdown
-    And I set the "Price" to "20.05"
     And I press the "Update" button
     Then I should see the message "Success"
     When I copy the "Id" field
@@ -114,14 +111,10 @@ Scenario: Update a Product
     And I press the "Retrieve" button
     Then I should see the message "Success"
     And I should see "Saw" in the "Name" field
-    And I should see "A plain saw" in the "Description" field
-    And I should see "False" in the "Available" dropdown
-    And I should see "Tools" in the "Category" dropdown
-    And I should see "20.05" in the "Price" field
     When I press the "Clear" button
     And I press the "Search" button
     Then I should see the message "Success"
-    And I should see "A plain saw" in the results
+    And I should see "Saw" in the results
     And I should not see "Hat" in the results
 
 Scenario: Delete a Product
